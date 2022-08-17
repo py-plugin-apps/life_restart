@@ -1,5 +1,5 @@
-import { FrameToStream, createEvent } from "../../../core/client/client.js";
-import { segment } from "oicq";
+import {FrameToStream, createEvent} from "../../../core/client/client.js";
+import {segment} from "oicq";
 
 export const rule = {
   life_restart: {
@@ -10,6 +10,7 @@ export const rule = {
 };
 
 export async function life_restart(e) {
+  let msg = []
   FrameToStream({
     _package: "life_restart",
     _handler: "restart",
@@ -20,7 +21,10 @@ export async function life_restart(e) {
       if (error) {
         console.log(error.stack);
       } else {
-        let msg = [response.message];
+        if(response.message){
+          msg.push(response.message)
+        }
+
         if (response.messageDict.at) {
           msg.push(segment.at(response.messageDict.at));
         }
@@ -28,8 +32,11 @@ export async function life_restart(e) {
         if (response.image) {
           msg.push(segment.image(response.image));
         }
-        e.reply(msg);
       }
     },
-  });
+  }).on("end", () => {
+    e.reply(msg)
+  })
+
+  return true
 }
