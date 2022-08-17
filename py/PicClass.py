@@ -2,7 +2,8 @@ import os
 from PIL import ImageFont, ImageDraw, Image
 from io import BytesIO
 from core import BytesIOToBytes
-FILE_PATH = os.path.dirname(__file__)
+
+FILE_PATH = os.path.dirname(os.path.abspath(__file__))
 
 
 class ImgText:
